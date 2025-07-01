@@ -1,20 +1,27 @@
-FROM python:3.12-slim
+FROM python:3.13.5-alpine
 
 ARG PORT=8050
 
 WORKDIR /app
 
-# Install uv
-RUN pip install uv
+# RUN Layer 1: [APK] System dependencies
+RUN apk add --no-cache ca-certificates catatonit
 
-# Copy the MCP server files
+# RUN Layer 2: [Python] System Python dependencies
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip uv
+
+# Copy the application files
 COPY . .
 
-# Install packages
-RUN python -m venv .venv
-RUN uv pip install -e .
+# RUN Layer 3: [App] Application dependencies
+RUN python -m venv .venv \
+    && .venv/bin/pip install --no-cache-dir -e .
+
+# Switch to non-root user
+USER nobody
 
 EXPOSE ${PORT}
 
 # Command to run the MCP server
-CMD ["uv", "run", "src/main.py"]
+CMD ["catatonit", "--", "uv", "run", "src/main.py"]
