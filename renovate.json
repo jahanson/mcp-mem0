@@ -4,7 +4,4 @@
   "pip_requirements": {
     "enabled": true
   },
-  "pyproject": {
-    "enabled": true
-  }
 }
