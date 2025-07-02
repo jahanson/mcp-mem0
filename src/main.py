@@ -35,13 +35,17 @@ async def mem0_lifespan(server: FastMCP) -> AsyncIterator[Mem0Context]:
         Mem0Context: The context containing the Mem0 client
     """
     # Create and return the Memory client with the helper function in utils.py
-    mem0_client = get_mem0_client()
-    
     try:
+        logger.info("Initializing Mem0 client...")
+        mem0_client = get_mem0_client()
+        logger.info("Mem0 client initialized successfully")
         yield Mem0Context(mem0_client=mem0_client)
-    finally:
-        # No explicit cleanup needed for the Mem0 client
-        pass
+    except Exception as e:
+        logger.error(f"Failed to initialize Mem0 client: {e}")
+        logger.error("This may be due to database connection issues or vector index conflicts")
+        logger.error("Please check your DATABASE_URL and ensure your database is accessible")
+        # Re-raise the exception to prevent the server from starting with a broken state
+        raise
 
 # Initialize FastMCP server with the Mem0 client as context
 mcp = FastMCP(
