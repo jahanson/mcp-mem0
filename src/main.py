@@ -7,8 +7,10 @@ from mem0 import Memory
 import asyncio
 import json
 import os
+import sys
 
 from utils import get_mem0_client
+from logging_utils import logger
 
 load_dotenv()
 
