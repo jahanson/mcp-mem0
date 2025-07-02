@@ -1,8 +1,11 @@
+# Load environment variables before any other imports
+from dotenv import load_dotenv
+load_dotenv()
+
 from mcp.server.fastmcp import FastMCP, Context
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
-from dotenv import load_dotenv
 from mem0 import Memory
 import asyncio
 import json
@@ -11,8 +14,6 @@ import sys
 
 from utils import get_mem0_client
 from logging_utils import logger
-
-load_dotenv()
 
 # Default user ID for memory operations
 DEFAULT_USER_ID = "user"
