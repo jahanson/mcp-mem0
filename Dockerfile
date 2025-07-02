@@ -14,19 +14,23 @@ RUN apk add --no-cache ca-certificates catatonit
 
 # RUN Layer 2: [Python] System Python dependencies
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --upgrade pip uv
+    --mount=type=cache,target=/.cache/uv \
+    pip install --upgrade pip uv \
+    && mkdir -p /.cache/uv && chown nobody:nobody /.cache/uv
 
 # Copy the application files
 COPY . .
 
 # RUN Layer 3: [App] Application dependencies
 RUN python -m venv .venv \
-    && .venv/bin/pip install --no-cache-dir -e .
+    && .venv/bin/pip install --no-cache-dir -e . \
+    && mkdir -p /.mem0 /app/.mem0 && chown nobody:nobody /.mem0 /app/.mem0
 
-# Switch to non-root user
+# Switch to non-root user and set MEM0_HOME to writable directory
 USER nobody
+ENV MEM0_HOME=/app/.mem0
 
 EXPOSE ${PORT}
 
 # Command to run the MCP server
-CMD ["catatonit", "--", "uv", "run", "src/main.py"]
+CMD ["catatonit", "--", ".venv/bin/python", "src/main.py"]
