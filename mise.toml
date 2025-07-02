@@ -22,7 +22,7 @@ usage = 'arg "<version>" help="The version to build and push. ex. 0.1.1"'
 description = "Push all tags to Docker Hub (requires login)"
 
 [tasks."docker:down"]
-run = 'docker rm -f mcp-mem0 2>nul || true'
+run = 'docker rm -f mcp-mem0 || true'
 description = "Stop and remove the mcp-mem0 container"
 
 [tasks."docker:run"]
