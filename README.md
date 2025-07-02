@@ -100,15 +100,27 @@ With stdio, the MCP client iself can spin up the MCP server, so nothing to run a
 
 ### Using Docker
 
-#### SSE Transport
+#### With mise (Recommended)
+
+If you have `mise` installed, you can use the predefined Docker task:
 
 ```bash
-docker run --env-file .env -p:8050:8050 mcp/mem0
+mise docker:run
+```
+
+This does the same as `docker run --env-file .env -p 8050:8050 jahanson/mcp-mem0:latest`.
+
+#### Manual Docker Commands
+
+##### SSE Transport
+
+```bash
+docker run --env-file .env -p 8050:8050 mcp/mem0
 ```
 
 The MCP server will essentially be run as an API endpoint within the container that you can then connect to with config shown below.
 
-#### Stdio Transport
+##### Stdio Transport
 
 With stdio, the MCP client iself can spin up the MCP server container, so nothing to run at this point.
 

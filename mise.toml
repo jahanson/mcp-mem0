@@ -1,0 +1,32 @@
+[env]
+_.file = ".env"
+_.python.venv = { path = ".venv", create = true }
+
+[tools]
+python = "3.13"
+
+[tasks."docker:build"]
+alias = "build"
+run = 'docker build -t jahanson/mcp-mem0:latest -t jahanson/mcp-mem0:v{{arg(name="version")}} -f Dockerfile .'
+usage = 'arg "<version>" help="The version to build and push. ex. 0.1.1"'
+description = "Build image with latest and version tags. ex. `mise docker:build 0.1.1`"
+
+[tasks."docker:push"]
+alias = "push"
+run = '''
+docker push jahanson/mcp-mem0:latest
+docker push jahanson/mcp-mem0:v{{arg(name="version")}}
+'''
+# depends = ["docker:build {{arg(name=\"version\")}}"]
+usage = 'arg "<version>" help="The version to build and push. ex. 0.1.1"'
+description = "Push all tags to Docker Hub (requires login)"
+
+[tasks."docker:down"]
+run = 'docker rm -f mcp-mem0 2>nul || true'
+description = "Stop and remove the mcp-mem0 container"
+
+[tasks."docker:run"]
+alias = "run"
+depends = ["docker:down"]
+run = 'docker run -d --env-file .env -p 8050:8050 --name mcp-mem0 jahanson/mcp-mem0:latest'
+description = "Run the container for local development and testing (mirrors .env settings)"
