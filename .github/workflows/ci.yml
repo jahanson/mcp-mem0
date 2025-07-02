@@ -73,7 +73,7 @@ jobs:
 
       - name: Test endpoint availability
         run: |
-          wget --spider --tries=5 --timeout=10 http://localhost:8085/ || \
+          wget --spider --tries=5 --timeout=10 http://localhost:8085/sse || \
           (echo "Service not responding on port 8085" && exit 1)
 
       - name: Check container logs
