@@ -29,7 +29,12 @@ description = "Push all tags to Docker Hub (requires login)"
 depends = ["docker:build", "docker:push"]
 description = "Build, tag and push in one go"
 
+[tasks."docker:down"]
+run = 'pwsh -C "try { docker stop mcp-mem0 } catch {}; while (docker ps -q -f name=mcp-mem0) { Start-Sleep -Seconds 1 }; try { docker rm mcp-mem0 } catch {}"'
+description = "Stop and remove the mcp-mem0 container"
+
 [tasks."docker:run"]
 alias = "run"
+depends = ["docker:down"]
 run = 'pwsh -C docker run -d --env-file .env -p 8050:8050 --name mcp-mem0 jahanson/mcp-mem0:latest'
 description = "Run the container for local development and testing (mirrors .env settings)"

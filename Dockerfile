@@ -18,13 +18,16 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip uv \
     && mkdir -p /.cache/uv && chown nobody:nobody /.cache/uv
 
-# Copy the application files
-COPY . .
+# Copy dependency files first for better layer caching
+COPY pyproject.toml ./
 
 # RUN Layer 3: [App] Application dependencies
 RUN python -m venv .venv \
     && .venv/bin/pip install --no-cache-dir -e . \
     && mkdir -p /.mem0 /app/.mem0 && chown nobody:nobody /.mem0 /app/.mem0
+
+# Copy application code last (most frequently changed)
+COPY src/ ./src/
 
 # Switch to non-root user and set MEM0_HOME to writable directory
 USER nobody
