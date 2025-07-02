@@ -29,11 +29,16 @@ RUN python -m venv .venv \
 # Copy application code last (most frequently changed)
 COPY src/ ./src/
 
-# Switch to non-root user and set MEM0_HOME to writable directory
+# Switch to non-root user and set home directory, MEM0 requires HOME to be set.
 USER nobody
-ENV MEM0_HOME=/app/.mem0
+ENV HOME=/app \
+  MEM0_HOME=/app/.mem0
 
 EXPOSE ${PORT}
+
+# Add health check to monitor service availability
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=40s \
+    CMD wget --spider -q http://127.0.0.1:${PORT}/sse || exit 1
 
 # Command to run the MCP server
 CMD ["catatonit", "--", ".venv/bin/python", "src/main.py"]
