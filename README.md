@@ -213,6 +213,40 @@ Add this server to your MCP configuration for Claude Desktop, Windsurf, or any o
 }
 ```
 
+## Logging
+
+This project uses [Loguru](https://loguru.readthedocs.io/) for structured, colored logging. The logging configuration provides:
+
+- **Colored output** with level-specific colors (DEBUG=blue, INFO=cyan, WARNING=yellow, ERROR=red, CRITICAL=magenta)
+- **Structured format** with timestamps and level indicators
+- **Configurable log levels** and async logging support
+
+### Quick Start
+
+```python
+from loguru import logger
+
+logger.debug("Debugging information")
+logger.info("Application started")
+logger.warning("Potential issue detected")
+logger.error("An error occurred")
+logger.critical("Critical system failure")
+```
+
+### Changing Log Level
+
+Modify the `level` parameter in `src/logging_utils.py`:
+
+```python
+logger.add(
+    sys.stdout,
+    level="INFO",  # Change to desired level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    # ... other configuration
+)
+```
+
+For detailed logging documentation, see [docs/logging.md](docs/logging.md).
+
 ## Building Your Own Server
 
 This template provides a foundation for building more complex MCP servers. To build your own:
