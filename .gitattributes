@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Ensure Unix line endings for Docker and Unix files
+Dockerfile text eol=lf
+*.sh text eol=lf
+*.bash text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
