@@ -2,6 +2,11 @@ FROM python:3.13.5-alpine
 
 ARG PORT=8050
 
+# Add OCI labels for image metadata
+LABEL org.opencontainers.image.source="https://github.com/jahanson/mcp-mem0" \
+    org.opencontainers.image.description="An MCP server implementation using Mem0." \
+    org.opencontainers.image.licenses="MIT"
+
 WORKDIR /app
 
 # RUN Layer 1: [APK] System dependencies
