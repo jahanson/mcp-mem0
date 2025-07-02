@@ -2,16 +2,12 @@
 _.file = ".env"
 _.python.venv = { path = ".venv", create = true }
 
-[hooks.enter]
-shell = "pwsh"
-script = "echo 'I entered the project'"
-
 [tools]
 python = "3.13"
 
 [tasks."docker:build"]
 alias = "build"
-run = 'pwsh -C docker build -t jahanson/mcp-mem0:latest -t jahanson/mcp-mem0:v{{arg(name="version")}} -f Dockerfile .'
+run = 'docker build -t jahanson/mcp-mem0:latest -t jahanson/mcp-mem0:v{{arg(name="version")}} -f Dockerfile .'
 usage = 'arg "<version>" help="The version to build and push. ex. 0.1.1"'
 description = "Build image with latest and version tags. ex. `mise docker:build 0.1.1`"
 
@@ -25,16 +21,12 @@ docker push jahanson/mcp-mem0:v{{arg(name="version")}}
 usage = 'arg "<version>" help="The version to build and push. ex. 0.1.1"'
 description = "Push all tags to Docker Hub (requires login)"
 
-[tasks."docker:all"]
-depends = ["docker:build", "docker:push"]
-description = "Build, tag and push in one go"
-
 [tasks."docker:down"]
-run = 'pwsh -C "try { docker stop mcp-mem0 } catch {}; while (docker ps -q -f name=mcp-mem0) { Start-Sleep -Seconds 1 }; try { docker rm mcp-mem0 } catch {}"'
+run = 'docker rm -f mcp-mem0 2>nul || true'
 description = "Stop and remove the mcp-mem0 container"
 
 [tasks."docker:run"]
 alias = "run"
 depends = ["docker:down"]
-run = 'pwsh -C docker run -d --env-file .env -p 8050:8050 --name mcp-mem0 jahanson/mcp-mem0:latest'
+run = 'docker run -d --env-file .env -p 8050:8050 --name mcp-mem0 jahanson/mcp-mem0:latest'
 description = "Run the container for local development and testing (mirrors .env settings)"
