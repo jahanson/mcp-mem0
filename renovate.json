@@ -3,5 +3,5 @@
   "extends": ["config:recommended", ":enablePreCommit"],
   "pip_requirements": {
     "enabled": true
-  },
+  }
 }
