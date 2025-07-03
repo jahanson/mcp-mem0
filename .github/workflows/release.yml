@@ -5,6 +5,10 @@ on:
     branches: [main] # every merge to main
     tags: ["v*"] # semantic or manual tags
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   IMAGE_NAME: jahanson/mcp-mem0
 
