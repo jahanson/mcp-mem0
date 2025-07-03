@@ -1,11 +1,7 @@
 from loguru import logger
 import sys, os, logging
 
-LOG_FORMAT = (
-    "<cyan>{time:YYYY-MM-DD HH:mm:ss}</cyan> | "
-    "{level.icon} <level>{level: <8}</level> | "
-    "<level>{message}</level>"
-)
+LOG_FORMAT = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level}</level> | {message}"
 
 COLOR_LEVELS = {
     "DEBUG": "blue",
@@ -19,7 +15,7 @@ COLOR_LEVELS = {
 logger.remove()
 logger.add(
     sys.stdout,
-    colorize=True,
+    colorize=not sys.platform.startswith("win"),
     format=LOG_FORMAT,
     level="DEBUG",
     enqueue=os.getenv("LOG_ASYNC", "0") == "1",
