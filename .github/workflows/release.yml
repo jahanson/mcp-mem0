@@ -45,7 +45,7 @@ jobs:
             type=sha
 
       - name: Build, attest & push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           provenance: ${{ github.event_name != 'pull_request' && 'mode=max' || 'false' }}
           sbom: ${{ github.event_name != 'pull_request' }}
